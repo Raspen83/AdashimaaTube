@@ -5,8 +5,7 @@
 @namespace      https://userstyles.world/user/sapondanaisriwan
 @homepageURL    https://github.com/sapondanaisriwan/AdashimaaTube
 @supportURL     https://github.com/sapondanaisriwan/AdashimaaTube/issues
-@updateURL      https://userstyles.world/api/style/6944.user.css
-@version        2.4.6
+@version        2.5.2
 @license        MIT
 @preprocessor   stylus
 
@@ -67,11 +66,12 @@
 }
 @var checkbox descriptionExpanded      "  📭 Description Expanded" 0
 @var checkbox hideTabs                 "  ❌ Hide Tabs" 0
-@var checkbox antiShorts               "  ❌ Hide Shorts" 0
+@var checkbox antiShorts               "  ❌ Hide Shorts" 1
 @var checkbox hideAnnotation           "  ❌ Hide Annotations" 0
 @var checkbox hideRecommendPL          "  ❌ Hide Recommended" 0
 @var checkbox hidecommuPosts           "  ❌ Hide Community Posts" 0
 @var checkbox hideMoviesSection        "  ❌ Hide Movies Section" 1
+@var checkbox hideExploreTopics        "  ❌ Hide Explore Topics" 0
 @var checkbox hideDonation             "  💵 Hide Donation Shelf" 0
 @var checkbox hideRightSideVideos      "  🎦 Hide Right Side Videos" 0
 @var checkbox hideLikeAnimation        "  👍 Hide Like Animation" 0
@@ -317,6 +317,13 @@ Support me: https://ko-fi.com/sapondanaisriwan
                                 display: none;
                             }
                         }
+
+                        /* Normalize "Explore more topics" shelf thumbnail sizes to match grid */
+                        &:has(ytd-chips-shelf-with-video-shelf-renderer) {
+                            ytd-rich-shelf-renderer {
+                                --ytd-rich-grid-items-per-row: var(--video-per-row) i;
+                            }
+                        }
                     }
                 }
             }
@@ -558,7 +565,7 @@ Support me: https://ko-fi.com/sapondanaisriwan
                 #header.ytd-search,
                 ytd-two-column-search-results-renderer.ytd-search,
                 #primary.ytd-two-column-search-results-renderer {
-                    max-width: 100% if searchPageNoLimitWidth;
+                    max-width: 100% i if searchPageNoLimitWidth;
                 }
                 
                 \ytd-channel-renderer {
@@ -1351,6 +1358,9 @@ Support me: https://ko-fi.com/sapondanaisriwan
             ytd-rich-section-renderer:has(img[src*="movieposter"]) {
                 display: none i if hideMoviesSection;
             }
+            ytd-rich-section-renderer:has(ytd-chips-shelf-with-video-shelf-renderer) {
+                display: none i if hideExploreTopics;
+            }
         }
 
         /* ❌ Hide Recommended Section */
@@ -1822,6 +1832,10 @@ Support me: https://ko-fi.com/sapondanaisriwan
             display: none i;
         } */
 
+        #bottom-row.ytd-watch-metadata {
+            display: none i;
+        }
+        
         #meta-contents[hidden],
         #info-contents[hidden] {
             display: block i;
@@ -1881,9 +1895,9 @@ Support me: https://ko-fi.com/sapondanaisriwan
             position: relative;
         }
         
-        #owner.ytd-watch-metadata {
+/*         #owner.ytd-watch-metadata {
             min-width: unset;
-        }
+        } */
         
         ytd-video-primary-info-renderer {
             padding: 0 i;
@@ -2466,10 +2480,11 @@ Support me: https://ko-fi.com/sapondanaisriwan
         ytd-video-preview:not([has-endorsement]) #inline-preview-player.ytp-rounded-inline-preview .html5-main-video,
 
         /* Removes border from miniplayer */
+        ytd-miniplayer,
         ytd-miniplayer[rounded-container] #player-container.ytd-miniplayer,
         ytd-miniplayer[rounded-container] #video-container.ytd-miniplayer .video.ytd-miniplayer,
         ytd-miniplayer[rounded-container] #card.ytd-miniplayer,
-        ytd-miniplayer[rounded-container], // #show-hide-button > ytd-toggle-button-renderer > yt-button-shape > button > yt-touch-feedback-shape > div > div.yt-spec-touch-feedback-shape__fill
+        ytd-miniplayer[rounded-container],
         /* Removes border around Live chat */
         ytd-live-chat-frame[rounded-container],
         ytd-live-chat-frame[rounded-container] #show-hide-button.ytd-live-chat-frame ytd-toggle-button-renderer.ytd-live-chat-frame,
